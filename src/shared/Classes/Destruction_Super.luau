@@ -14,6 +14,18 @@ function Destruction.new(Lifetime: number, Amount: number, Size: Vector3?, Tween
     self.Parts = {} :: {Part}
 
     task.delay(self.Lifetime, function()
+        local last: Tween
+        for _, tween in pairs(self.Tweens) do
+            if tween then
+                last = tween
+                tween:Play()
+            end
+        end
+
+        if last ~= nil then
+            last.Completed:Wait()
+        end
+
         self:Destroy()
     end)
 
